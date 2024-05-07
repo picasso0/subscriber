@@ -30,41 +30,30 @@ collection = db["requests_logs"]
 
 @app.get("/items/")
 def get_items(
-    class_id: Optional[str] = None,
-    status_code: Optional[int] = None,
-    created_at_start: Optional[datetime] = None,
-    created_at_end: Optional[datetime] = None,
+    classNumber: Optional[int] = None,
+    statusCode: Optional[int] = None,
     page: int = 1,
-    page_size: int = 10,
+    count: int = 10,
 ) -> List[dict]:
-
     query = {}
 
-    if class_id:
-        query["class_id"] = class_id
-    if status_code:
-        query["status_code"] = status_code
-    if created_at_start and created_at_end:
-        query["created_at"] = {
-            "$gte": created_at_start, "$lte": created_at_end}
-    elif created_at_start:
-        query["created_at"] = {"$gte": created_at_start}
-    elif created_at_end:
-        query["created_at"] = {"$lte": created_at_end}
-
+    if classNumber:
+        query["class"] = classNumber
+    if statusCode:
+        query["status_code"] = statusCode
     total_count = collection.count_documents(query)
-    total_pages = ceil(total_count / page_size)
-    skip = (page - 1) * page_size
-    items = list(collection.find(query).skip(skip).limit(page_size))
+    total_pages = ceil(total_count / count)
+    skip = (page - 1) * count
+    items = list(collection.find(query).skip(skip).limit(count))
     result_data = []
     for item in items:
         item['_id'] = str(item['_id'])
         result_data.append(item)
     data = {
-        "total_count": total_count,
-        "total_pages": total_pages,
-        "page": page,
-        "page_size": page_size,
+        "totalCount": total_count,
+        "totalPages": total_pages,
+        "currentPage": page,
+        "count": count,
         "items": result_data
     }
     return JSONResponse(content=data, status_code=200)
