@@ -35,7 +35,7 @@ def get_items(
     created_at_start: Optional[datetime] = None,
     created_at_end: Optional[datetime] = None,
     page: int = 1,
-    page_size: int = 1,
+    page_size: int = 10,
 ) -> List[dict]:
 
     query = {}
