@@ -12,7 +12,6 @@ RABBITMQ_VHOST = 'gateway'
 
 
 async def consume_message_from_rabbitmq():
-    print("start")
     try:
         connection = await aio_pika.connect_robust(
             host=RABBITMQ_HOST,
@@ -52,7 +51,7 @@ async def consume_message_from_rabbitmq():
                         client = pymongo.MongoClient(
                             "mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority")
                         db = client["logs"]
-                        collection = db["request_logs"]
+                        collection = db["requests_logs"]
                         result = collection.insert_one(data)
                         client.close()
                     except Exception as ex:
