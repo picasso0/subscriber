@@ -12,6 +12,7 @@ RABBITMQ_VHOST = 'gateway'
 
 
 async def consume_message_from_rabbitmq():
+    print("start")
     try:
         connection = await aio_pika.connect_robust(
             host=RABBITMQ_HOST,
@@ -64,6 +65,3 @@ async def consume_message_from_rabbitmq():
 # Run the subscriber coroutine
 async def run_subscriber():
     await consume_message_from_rabbitmq()
-
-async def main():
-    await run_subscriber()
