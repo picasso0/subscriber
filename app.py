@@ -50,10 +50,15 @@ def get_items(
         item['_id'] = str(item['_id'])
         result_data.append(item)
     data = {
+        "data":{
         "totalCount": total_count,
         "totalPages": total_pages,
         "currentPage": page,
         "count": count,
         "items": result_data
+        },
+        "message":"عملیات با موفقیت انجام شد",
+        "id":4968,
+        "code":200
     }
     return JSONResponse(content=data, status_code=200)
