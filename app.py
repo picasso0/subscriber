@@ -42,7 +42,7 @@ def get_items(
     load_dotenv()
     correct_token = str(os.getenv("TOKEN"))
     if authorization is None or authorization != correct_token:
-        raise HTTPException(status_code=401, detail={correct_token:authorization})
+        raise HTTPException(status_code=401, detail="کاربر احراز هویت نشده است")
 
     query = {}
 
