@@ -40,7 +40,7 @@ def get_items(
 ) -> List[dict]:
     
     load_dotenv()
-    correct_token = str(os.getenv("TOEKN"))
+    correct_token = str(os.getenv("TOKEN"))
     if authorization is None or authorization != correct_token:
         raise HTTPException(status_code=401, detail={correct_token:authorization})
 
