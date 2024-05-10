@@ -7,3 +7,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8787:8787
+    environment:
+      - TOKEN=test

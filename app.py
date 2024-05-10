@@ -1,11 +1,13 @@
 import asyncio
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import JSONResponse
 from pymongo import MongoClient
 from datetime import datetime
 from typing import List, Optional
 from subscriber import run_subscriber
 from math import ceil
+from dotenv import load_dotenv
+import os
 
 RABBITMQ_HOST = '77.238.108.86'
 RABBITMQ_PORT = 5672
@@ -34,7 +36,14 @@ def get_items(
     statusCode: Optional[int] = None,
     page: int = 1,
     count: int = 10,
+    authorization: str = Header(None)
 ) -> List[dict]:
+    
+    load_dotenv()
+    correct_token = str(os.getenv("TOEKN"))
+    if authorization is None or authorization != correct_token:
+        raise HTTPException(status_code=401, detail="کاربر احراز هویت نشده است")
+
     query = {}
 
     if classNumber:
