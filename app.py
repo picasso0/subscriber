@@ -9,14 +9,8 @@ from math import ceil
 from dotenv import load_dotenv
 import os
 
-RABBITMQ_HOST = '77.238.108.86'
-RABBITMQ_PORT = 5672
-RABBITMQ_USERNAME = 'gateway'
-RABBITMQ_PASSWORD = 'Bgateway@1256'
-RABBITMQ_VHOST = 'gateway'
-
 app = FastAPI()
-
+load_dotenv()
 
 @app.on_event("startup")
 async def startup_event():
@@ -25,7 +19,7 @@ async def startup_event():
 
 # Connect to MongoDB
 client = MongoClient(
-    "mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority")
+    str(os.getenv("MONGO_URL")))
 db = client["logs"]
 collection = db["requests_logs"]
 
@@ -39,7 +33,6 @@ def get_items(
     authorization: str = Header(None)
 ) -> List[dict]:
     
-    load_dotenv()
     correct_token = str(os.getenv("TOKEN"))
     if authorization is None or authorization != correct_token:
         raise HTTPException(status_code=401, detail="کاربر احراز هویت نشده است")

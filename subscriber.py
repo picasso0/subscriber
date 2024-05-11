@@ -3,17 +3,18 @@ import pymongo
 import json
 from time import sleep
 from dotenv import load_dotenv
-from os import getenv
-
+import os
 
 async def consume_message_from_rabbitmq():
+    
     load_dotenv()
-    rabbit_host = str(getenv("RABBITMQ_HOST"))
-    rabbit_port = int(getenv("RABBITMQ_PORT"))
-    rabbit_user = str(getenv("RABBITMQ_USERNAME"))
-    rabbit_pass = str(getenv("RABBITMQ_PASSWORD"))
-    rabbit_vhost = str(getenv("RABBITMQ_VHOST"))
-    mongo_url = str(getenv("MONGO_URL"))
+    rabbit_host = str(os.getenv("RABBITMQ_HOST"))
+    rabbit_port = int(os.getenv("RABBITMQ_PORT"))
+    rabbit_user = str(os.getenv("RABBITMQ_USERNAME"))
+    rabbit_pass = str(os.getenv("RABBITMQ_PASSWORD"))
+    rabbit_vhost = str(os.getenv("RABBITMQ_VHOST"))
+    mongo_url = str(os.getenv("MONGO_URL"))
+    
     try:
         connection = await aio_pika.connect_robust(
             host=rabbit_host,
