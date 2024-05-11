@@ -48,6 +48,8 @@ async def consume_message_from_rabbitmq():
                             class_id = 1
                         elif data['status_code'] == 400:
                             class_id = 1
+                        elif data['status_code'] == 422:
+                            class_id = 1
 
                         data['class'] = class_id
                         client = pymongo.MongoClient(
