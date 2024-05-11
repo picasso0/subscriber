@@ -8,4 +8,10 @@ services:
     ports:
       - 8787:8787
     environment:
-      - TOKEN=test
+      - TOKEN = test
+      - RABBITMQ_HOST = 77.238.108.86
+      - RABBITMQ_PORT = 5672
+      - RABBITMQ_USERNAME = gateway
+      - RABBITMQ_PASSWORD = Bgateway@1256
+      - RABBITMQ_VHOST = gateway
+      - MONGO_URL = mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority

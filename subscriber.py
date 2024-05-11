@@ -2,23 +2,25 @@ import aio_pika
 import pymongo
 import json
 from time import sleep
-
-
-RABBITMQ_HOST = '77.238.108.86'
-RABBITMQ_PORT = 5672
-RABBITMQ_USERNAME = 'gateway'
-RABBITMQ_PASSWORD = 'Bgateway@1256'
-RABBITMQ_VHOST = 'gateway'
+from dotenv import load_dotenv
+from os import getenv
 
 
 async def consume_message_from_rabbitmq():
+    load_dotenv()
+    rabbit_host = str(getenv("RABBITMQ_HOST"))
+    rabbit_port = int(getenv("RABBITMQ_PORT"))
+    rabbit_user = str(getenv("RABBITMQ_USERNAME"))
+    rabbit_pass = str(getenv("RABBITMQ_PASSWORD"))
+    rabbit_vhost = str(getenv("RABBITMQ_VHOST"))
+    mongo_url = str(getenv("MONGO_URL"))
     try:
         connection = await aio_pika.connect_robust(
-            host=RABBITMQ_HOST,
-            port=RABBITMQ_PORT,
-            login=RABBITMQ_USERNAME,
-            password=RABBITMQ_PASSWORD,
-            virtualhost=RABBITMQ_VHOST
+            host=rabbit_host,
+            port=rabbit_port,
+            login=rabbit_user,
+            password=rabbit_pass,
+            virtualhost=rabbit_vhost
         )
 
         async with connection:
@@ -49,7 +51,7 @@ async def consume_message_from_rabbitmq():
 
                         data['class'] = class_id
                         client = pymongo.MongoClient(
-                            "mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority")
+                            mongo_url)
                         db = client["logs"]
                         collection = db["requests_logs"]
                         result = collection.insert_one(data)
