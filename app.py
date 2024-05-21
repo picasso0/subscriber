@@ -17,11 +17,15 @@ async def startup_event():
     asyncio.create_task(run_subscriber())
 
 
-# Connect to MongoDB
-client = MongoClient(
-    str(os.getenv("MONGO_URL")))
-db = client["logs"]
-collection = db["requests_logs"]
+client = None
+collection = None
+try:
+    client = MongoClient(
+        "mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority")
+    db = client["logs"]
+    collection = db["requests_logs"]
+except:
+    print("mongo db is down")
 
 # app.add_middleware(BaseHTTPMiddleware, dispatch=GateWay(Request, Header))
 app.add_middleware(
@@ -43,7 +47,10 @@ def get_items(
     correct_token = str(os.getenv("TOKEN"))
     if authorization is None or authorization != correct_token:
         raise HTTPException(status_code=401, detail="کاربر احراز هویت نشده است")
-
+    
+    if collection==None:
+        return JSONResponse(content={"error":"سرور منگو با مشکل روبه رو شده است از صبر شما متشکریم"}, status_code=500)
+   
     query = {}
 
     if classNumber:
