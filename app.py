@@ -7,8 +7,8 @@ from typing import List, Optional
 from subscriber import run_subscriber
 from math import ceil
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
 import os
-
 app = FastAPI()
 load_dotenv()
 
@@ -23,6 +23,13 @@ client = MongoClient(
 db = client["logs"]
 collection = db["requests_logs"]
 
+# app.add_middleware(BaseHTTPMiddleware, dispatch=GateWay(Request, Header))
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"])
 
 @app.get("/items/")
 def get_items(
