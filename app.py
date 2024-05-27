@@ -20,8 +20,9 @@ async def startup_event():
 client = None
 collection = None
 try:
+    mongo_url=str(os.getenv("MONGO_URL"))
     client = MongoClient(
-        "mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority")
+        mongo_url)
     db = client["logs"]
     collection = db["requests_logs"]
 except:
@@ -35,8 +36,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"])
 
-@app.get("/items/")
-def get_items(
+@app.get("/v1/subscriber/subscriberApi/filterLog")
+def filter_logs(
     classNumber: Optional[int] = None,
     statusCode: Optional[int] = None,
     page: int = 1,
