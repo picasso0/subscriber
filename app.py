@@ -44,6 +44,7 @@ def get_items(
     authorization: str = Header(None)
 ) -> List[dict]:
     
+    
     correct_token = str(os.getenv("TOKEN"))
     if authorization is None or authorization != correct_token:
         raise HTTPException(status_code=401, detail="کاربر احراز هویت نشده است")
