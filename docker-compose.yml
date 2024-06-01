@@ -16,3 +16,4 @@ services:
       - RABBITMQ_VHOST=gateway
       - MONGO_URL=mongodb://77.238.108.86:27000/log?retryWrites=true&w=majority
       - RABBIT_EXCHANGE_NAME=logs
+      - DB_NAME=logs

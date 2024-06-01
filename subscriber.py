@@ -15,6 +15,7 @@ async def consume_message_from_rabbitmq():
     rabbit_vhost = str(os.getenv("RABBITMQ_VHOST"))
     mongo_url = str(os.getenv("MONGO_URL"))
     exchange_name = str(os.getenv("RABBIT_EXCHANGE_NAME"))
+    db_name = str(os.getenv("DB_NAME"))
     while(True):
         try:
             connection = await aio_pika.connect_robust(
@@ -56,7 +57,7 @@ async def consume_message_from_rabbitmq():
                             data['class'] = class_id
                             client = pymongo.MongoClient(
                                 mongo_url)
-                            db = client["logs"]
+                            db = client[db_name]
                             collection = db["requests_logs"]
                             result = collection.insert_one(data)
                             client.close()
