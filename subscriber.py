@@ -14,6 +14,7 @@ async def consume_message_from_rabbitmq():
     rabbit_pass = str(os.getenv("RABBITMQ_PASSWORD"))
     rabbit_vhost = str(os.getenv("RABBITMQ_VHOST"))
     mongo_url = str(os.getenv("MONGO_URL"))
+    exchange_name = str(os.getenv("RABBIT_EXCHANGE_NAME"))
     while(True):
         try:
             connection = await aio_pika.connect_robust(
@@ -28,7 +29,7 @@ async def consume_message_from_rabbitmq():
                 channel = await connection.channel()
 
                 # Declare a fanout exchange
-                exchange = await channel.declare_exchange('logs', aio_pika.ExchangeType.FANOUT)
+                exchange = await channel.declare_exchange(exchange_name, aio_pika.ExchangeType.FANOUT)
 
                 # Declare a queue
                 queue = await channel.declare_queue()
